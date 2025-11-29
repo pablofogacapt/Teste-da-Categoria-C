@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TESTES da Categoria C</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background: #f2f2f2;
+padding: 20px;
+}
+.quiz-container {
+max-width: 700px;
+margin: auto;
+background: white;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+.question {
+font-size: 20px;
+margin-bottom: 10px;
+}
+img.question-img {
+width: 60%;
+max-height: 250px;
+object-fit: cover;
+border-radius: 8px;
+margin-bottom: 15px;
+}
+.option {
+display: block;
+padding: 10px;
+margin: 8px 0;
+background: #e7e7e7;
+border-radius: 6px;
+cursor: pointer;
+transition: 0.3s;
+}
+.option:hover {
+background: #333333;
+color: white;
+}
+.option.correct {
+  background-color: #4caf50; /* Green */
+  color: white;
+}
+
+.option.wrong {
+  background-color: #f44336; /* Red */
+  color: white;
+}
+#result {
+font-size: 22px;
+font-weight: bold;
+text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+<h2>Teste da Categoria C - PESADOS</h2>
+<div id="quiz"></div>
+<button id="nextBtn" onclick="nextQuestion()" style="margin-top:20px; padding:10px 20px; font-size:16px;">Próxima</button>
+<p id="result"></p>
+</div>
+
+
+<script>
+const questions = [
+{
+question: "A letra 'A' apresentada regista no tacógrafo:",
+image: "img1.jpg",
+options: ["A velocidade.", "Os tempos de Repouso.", "A distância percorrida."],
+correct: 0
+},
+{
+question: "Durante a condução num veículo equipado com tacógrafo analógico, o condutor deve:",
+image: "img2.jpg",
+options: ["Inserir o disco de condutor no tacógrafo antes de ligar o veículo.", "Inserir o disco de condutor no tacógrafo após ligar o veículo.", "Inserir o disco de condutor no tacógrafo após ter dado início á marcha do veículo."],
+correct: 1
+},
+{
+question: "Durante a condução num veículo equipado com tacógrafo digital, o condutor deve: ",
+image: "img3.jpg",
+options: ["Inserir o cartão de condutor no tacógrafo antes de ligar o veículo.", "Inserir o cartão de condutor no tacógrafo após ligar o veículo.", "Inserir o cartão de condutor no tacógrafo após ter dado início á marcha do veículo."],
+correct: 1
+},
+{
+question: "O período conhecido por REPOUSO, corresponde:",
+image: "img4.jpg",
+options: ["Ao período ininterrupto durante o qual o condutor pode dispor livremente do seu tempo.", "Ao período em que o condutor exerce a condução do veículo.", "Ao período em que o condutor se encontra a aguardar uma carga ou descarga do veículo."],
+correct: 0
+},
+{
+question: "A letra 'A' apresentada regista no tacógrafo:",
+image: "img5.jpg",
+options: ["A velocidade.", "Os tempos de Repouso.", "A distância percorrida."],
+correct: 1
+},
+{
+question: "Os veículos de passageiros com lotação superior a nove passageiros, incluindo o condutor, e destinados a essa finalidade dispões obrigatóriamente de um tacógrafo.",
+image: "img6.jpg",
+options: ["A afirmação está correta.", "A afirmação não está correta."],
+correct: 0
+},
+{
+question: "A letra 'A' apresentada regista no tacógrafo:",
+image: "img7.jpg",
+options: ["Permite registar a velocidade.", "Permite selecionar as atividades do condutor.", "Permite marcar a distância percorrida."],
+correct: 1
+},
+{
+question: "O período que é exclusivamente utilizado para recuperação, durante o qual o condutor não pode efetuar nenhum trabalho de condução ou outras atividades, chama-se:",
+image: "img8.jpg",
+options: ["Pausa.", "Tempo de condução.", "Outros trabalhos."],
+correct: 0
+},
+{
+question: "O período de pausa é destinado:",
+image: "img9.jpg",
+options: ["Exclusivamente para recuperação.", "Para efectuar outro trabalho de condução noutro veículo.", "Para efectuar outras atividades."],
+correct: 0
+},
+{
+question: "Entende-se por TEMPO DE CONDUÇÃO:",
+image: "img10.jpg",
+options: ["O período de condução registado para o condutor do veículo.", "O período em que o veículo está estacionado.", "O período em que o veículo circula."],
+correct: 2
+},
+{
+question: "Durante o transporte de mercadorias em automóveis pesados, deve ter-se em atenção:",
+image: "img11.jpg",
+options: ["Á utilização obrigatória de cintas de retenção para cargas indivisíveis que circulem em plataformas abertas.", "Para que a carga não exceda a altura de 3 metros a contar do solo."],
+correct: 0
+},
+{
+question: "Os veículos e conjuntos de veículos de mercadorias com massa máxima superior a 3,5 toneladas, possuem obrigatóriamente um tacógrafo.",
+image: "img13.jpg",
+options: ["A afirmação está correta.", "A afirmação não está correta."],
+correct: 0
+},
+{
+question: "O período de condução registado no tacógrafo, para o condutor do veículo é:",
+image: "img14.jpg",
+options: ["Tempo de condução.", "Pausa.", "Outros Trabalhos."],
+correct: 0
+},
+{
+question: "A figura do tacógrafo pode ser legendada da seguinte forma:",
+image: "img15.jpg",
+options: ["A - Escala de velocidade; B - Odómetro; C - Seletor de atividade.", "A - Odómetro; B - Escala de Velocidade; C - Seletor de Atividade.", "A - Escala de Velocidade; B - Odómetro; C - Comutador on/off do tacógrafo."],
+correct: 0
+}
+
+
+];
+
+
+let currentIndex = 0;
+let score = 0;
+let selected = false;
+
+function loadQuestion() {
+  selected = false;
+  const q = questions[currentIndex];
+
+  document.getElementById("quiz").innerHTML = `
+    <p class="question">${q.question}</p>
+    <img class="question-img" src="${q.image}">
+    ${q.options.map((opt, i) => `
+      <div class='option' onclick='selectOption(${i}, this)'>${opt}</div>
+    `).join('')}
+  `;
+}
+
+function selectOption(i, element) {
+  if (selected) return; // evita múltiplos cliques
+  selected = true;
+
+  const q = questions[currentIndex];
+  const options = document.querySelectorAll(".option");
+
+  // Marcar todas as opções
+  options.forEach((opt, index) => {
+    if (index === q.correct) {
+      opt.classList.add("correct"); // verde para a correta
+    } else if (index === i) {
+      opt.classList.add("wrong"); // vermelho para a errada escolhida
+    }
+    opt.style.pointerEvents = "none"; // bloqueia outras opções
+  });
+
+  if (i === q.correct) score++;
+}
+
+function nextQuestion() {
+  if (!selected) {
+    alert("Escolha uma opção antes de continuar!");
+    return;
+  }
+
+  currentIndex++;
+
+  if (currentIndex < questions.length) {
+    loadQuestion();
+  } else {
+    document.getElementById("quiz").innerHTML = "";
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("result").innerText = `Você acertou ${score} de ${questions.length} perguntas!`;
+  }
+}
+
+
+loadQuestion();
+</script>
+
+
+</body>
+</html>
